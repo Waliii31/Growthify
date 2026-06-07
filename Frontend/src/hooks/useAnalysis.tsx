@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from 'react';
 import type { PostAnalysis } from '@/types';
+import { buildApiUrl } from '@/lib/api';
 import { useAuth } from './useAuth';
 
 interface AnalysisContextType {
@@ -54,10 +55,10 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
       }
       try {
         const [analysesRes, usageRes] = await Promise.all([
-          fetch('/api/analyses', {
+          fetch(buildApiUrl('/api/analyses'), {
             headers: { Authorization: `Bearer ${user.token}` },
           }),
-          fetch('/api/users/usage', {
+          fetch(buildApiUrl('/api/users/usage'), {
             headers: { Authorization: `Bearer ${user.token}` },
           }),
         ]);
@@ -86,7 +87,7 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
   const refreshUsage = useCallback(async () => {
     if (!user?.token) return;
     try {
-      const res = await fetch('/api/users/usage', {
+      const res = await fetch(buildApiUrl('/api/users/usage'), {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       if (res.ok) {
@@ -107,7 +108,7 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
           throw new Error('Must be logged in to analyze');
         }
 
-        const res = await fetch('/api/analyses', {
+        const res = await fetch(buildApiUrl('/api/analyses'), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -155,7 +156,7 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
     async (id: string) => {
       try {
         if (user?.token) {
-          await fetch(`/api/analyses/${id}`, {
+          await fetch(buildApiUrl(`/api/analyses/${id}`), {
             method: 'DELETE',
             headers: { Authorization: `Bearer ${user.token}` },
           });
@@ -173,7 +174,7 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
     async (updatedItem: PostAnalysis) => {
       try {
         if (user?.token) {
-          const res = await fetch(`/api/analyses/${updatedItem.id}`, {
+          const res = await fetch(buildApiUrl(`/api/analyses/${updatedItem.id}`), {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

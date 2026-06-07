@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight } from 'lucide-react';
 import { Button, InputField } from '@/components/ui';
+import { buildApiUrl } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 
 export const SignupPage: React.FC = () => {
@@ -19,7 +20,7 @@ export const SignupPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/auth/register', {
+      const res = await fetch(buildApiUrl('/api/auth/register'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
@@ -41,7 +42,7 @@ export const SignupPage: React.FC = () => {
   const handleGoogleSignup = async () => {
     // Mock Google signup for now
     try {
-       const res = await fetch('/api/auth/google', {
+       const res = await fetch(buildApiUrl('/api/auth/google'), {
          method: 'POST',
          headers: { 'Content-Type': 'application/json' },
          body: JSON.stringify({ tokenId: 'mock_google_token' })

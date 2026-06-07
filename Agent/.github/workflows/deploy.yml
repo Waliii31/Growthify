@@ -1,0 +1,7 @@
+# This workflow file is legacy and not executed by GitHub Actions because Actions only reads workflows from the repository root.
+# The active deploy workflow lives at `.github/workflows/deploy-monorepo.yml`.
+
+# Use the root workflow to deploy:
+# - Agent => Hugging Face Spaces
+# - Frontend => Vercel
+# - Backend => Vercel

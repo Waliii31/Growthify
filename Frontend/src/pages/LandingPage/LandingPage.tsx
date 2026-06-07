@@ -14,6 +14,7 @@ import {
   Plus,
 } from 'lucide-react';
 import { Button, Card, ProgressRing, Accordion } from '@/components/ui';
+import { buildApiUrl } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
 import { landingFAQs } from '@/data/faqs';
 import { ComparisonCard } from './ComparisonCard';
@@ -35,7 +36,7 @@ export const LandingPage: React.FC = () => {
     setFeedback('');
 
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch(buildApiUrl('/api/contact'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, message, website }),
