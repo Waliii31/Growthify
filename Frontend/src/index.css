@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", sans-serif;
+
+  --color-primary: #005d8f;
+  --color-primary-linkedin: #0077b5;
+  --color-secondary: #6b38d4;
+  --color-secondary-purple: #8455ef;
+  --color-bg-base: #f8f9ff;
+  --color-surface-card: #ffffff;
+  --color-surface-lowest: #ffffff;
+  --color-surface-low: #eff4ff;
+  --color-surface-container: #e5eeff;
+  --color-surface-high: #dce9ff;
+  --color-surface-highest: #d3e4fe;
+  --color-on-surface: #0b1c30;
+  --color-on-surface-variant: #404850;
+  --color-outline: #707881;
+  --color-outline-variant: #bfc7d1;
+}
+
+/* Custom glass effect as requested in Design System */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.ai-glow:hover {
+  box-shadow: 0 0 20px rgba(132, 85, 239, 0.25);
+  border-color: rgba(132, 85, 239, 0.4);
+}
+
+.ai-gradient-text {
+  background: linear-gradient(135deg, #005d8f 0%, #6b38d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ai-gradient-bg {
+  background: linear-gradient(135deg, #005d8f 0%, #6b38d4 100%);
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #bfc7d1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #707881;
+}
+
