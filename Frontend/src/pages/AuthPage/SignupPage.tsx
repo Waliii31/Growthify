@@ -26,9 +26,16 @@ export const SignupPage: React.FC = () => {
         body: JSON.stringify({ name, email, password }),
       });
 
-      const data = await res.json();
+      let data;
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        throw new Error(`Server returned ${res.status}: non-JSON response`);
+      }
 
-      if (!res.ok) throw new Error(data.message || 'Signup failed');
+      if (!res.ok) throw new Error(data?.message || 'Signup failed');
 
       login(data);
       navigate('/dashboard');

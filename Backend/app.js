@@ -12,6 +12,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/auth", authRoutes);
+app.use("/api/analyses", analysisRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/contact", contactRoutes);
+
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
     return res.status(400).json({ message: "Invalid JSON payload" });
@@ -25,11 +30,6 @@ app.use((err, req, res, next) => {
   res.status(err && err.status ? err.status : 500)
      .json({ message: err && err.message ? err.message : 'Internal Server Error' });
 });
-
-app.use("/api/auth", authRoutes);
-app.use("/api/analyses", analysisRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/contact", contactRoutes);
 
 app.get("/", (req, res) => {
   res.send("API is running...");
