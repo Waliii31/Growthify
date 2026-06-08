@@ -14,6 +14,7 @@ const connectDB = async () => {
   } catch (error) {
     console.error("MongoDB connection failed:", error.message);
     console.error("Please ensure MongoDB is running or provide a valid MONGO_URI in .env");
+    process.exit(1); // Fail fast so Render shows the deployment as failed instead of running silently
   }
 
   mongoose.connection.on('error', err => {
