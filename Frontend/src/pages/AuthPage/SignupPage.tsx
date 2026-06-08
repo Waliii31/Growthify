@@ -94,11 +94,11 @@ export const SignupPage: React.FC = () => {
         </button>
 
         <div className="relative flex items-center py-2">
-          <div className="flex-grow border-t border-outline-variant/50"></div>
+          <div className="grow border-t border-outline-variant/50"></div>
           <span className="shrink-0 px-4 text-xs font-medium text-outline uppercase tracking-wider">
             Or sign up with email
           </span>
-          <div className="flex-grow border-t border-outline-variant/50"></div>
+          <div className="grow border-t border-outline-variant/50"></div>
         </div>
 
         {error && (
