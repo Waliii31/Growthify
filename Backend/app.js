@@ -19,6 +19,13 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
+// Global error handler — return JSON and log stack traces for easier debugging
+app.use((err, req, res, next) => {
+  console.error(err && err.stack ? err.stack : err);
+  res.status(err && err.status ? err.status : 500)
+     .json({ message: err && err.message ? err.message : 'Internal Server Error' });
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/analyses", analysisRoutes);
 app.use("/api/users", userRoutes);
