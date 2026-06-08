@@ -49,7 +49,8 @@ const createAnalysis = async (req, res) => {
 
   try {
     // Forward the request to the Python AI Microservice
-    const agentResponse = await fetch('http://127.0.0.1:8000/api/analyze', {
+    const agentUrl = process.env.AGENT_URL || 'http://127.0.0.1:8000';
+    const agentResponse = await fetch(`${agentUrl}/api/analyze`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ draftText, tone, audience }),
