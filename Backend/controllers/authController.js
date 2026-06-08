@@ -60,35 +60,46 @@ const loginUser = async (req, res) => {
 // @route   POST /api/auth/google
 // @access  Public
 const googleAuth = async (req, res) => {
-  const { tokenId } = req.body;
+  const { tokenId, accessToken } = req.body;
 
   try {
-    let ticket;
-    try {
-        ticket = await client.verifyIdToken({
-          idToken: tokenId,
-          audience: process.env.GOOGLE_CLIENT_ID,
-        });
-    } catch (e) {
-        // Fallback for mocked token in local dev if CLIENT_ID is not configured properly
-        if(tokenId === 'mock_google_token') {
-             const mockUser = await User.findOne({ email: 'mock@google.com' }) || await User.create({
-                name: 'Mock Google User',
-                email: 'mock@google.com',
-                googleId: '1234567890'
-             });
-             return res.json({
-                _id: mockUser._id,
-                name: mockUser.name,
-                email: mockUser.email,
-                subscriptionTier: mockUser.subscriptionTier,
-                token: generateToken(mockUser._id),
-             });
-        }
-        throw e;
+    let payload;
+    if (accessToken) {
+      const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+      if (!response.ok) throw new Error('Invalid access token');
+      const userInfo = await response.json();
+      payload = { email_verified: userInfo.email_verified, name: userInfo.name, email: userInfo.email, sub: userInfo.sub };
+    } else {
+      let ticket;
+      try {
+          ticket = await client.verifyIdToken({
+            idToken: tokenId,
+            audience: process.env.GOOGLE_CLIENT_ID,
+          });
+      } catch (e) {
+          // Fallback for mocked token in local dev if CLIENT_ID is not configured properly
+          if(tokenId === 'mock_google_token') {
+               const mockUser = await User.findOne({ email: 'mock@google.com' }) || await User.create({
+                  name: 'Mock Google User',
+                  email: 'mock@google.com',
+                  googleId: '1234567890'
+               });
+               return res.json({
+                  _id: mockUser._id,
+                  name: mockUser.name,
+                  email: mockUser.email,
+                  subscriptionTier: mockUser.subscriptionTier,
+                  token: generateToken(mockUser._id),
+               });
+          }
+          throw e;
+      }
+      payload = ticket.getPayload();
     }
 
-    const { email_verified, name, email, sub: googleId } = ticket.getPayload();
+    const { email_verified, name, email, sub: googleId } = payload;
 
     if (email_verified) {
       let user = await User.findOne({ email });

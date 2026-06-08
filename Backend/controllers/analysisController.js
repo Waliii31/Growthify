@@ -59,13 +59,14 @@ const createAnalysis = async (req, res) => {
     if (agentResponse.ok) {
       aiResult = await agentResponse.json();
     } else {
-      console.error('Python Agent Error:', await agentResponse.text());
+      const errText = await agentResponse.text();
+      console.error('Python Agent Error:', errText);
+      return res.status(502).json({ message: `AI Agent failed: ${errText}` });
     }
   } catch (error) {
     console.error('Failed to connect to Python Agent:', error.message);
+    return res.status(503).json({ message: 'AI Agent is currently unreachable.' });
   }
-
-  // If the agent succeeds, save the full result. Otherwise, fallback to a Draft state.
   const analysisData = {
     user: req.user._id,
     title,

@@ -4,6 +4,7 @@ import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { Button, InputField } from '@/components/ui';
 import { buildApiUrl } from '@/lib/api';
 import { useAuth } from '@/hooks/useAuth';
+import { useGoogleLogin } from '@react-oauth/google';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -45,22 +46,36 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    // Mock Google login for now
-    try {
-       const res = await fetch(buildApiUrl('/api/auth/google'), {
-         method: 'POST',
-         headers: { 'Content-Type': 'application/json' },
-         body: JSON.stringify({ tokenId: 'mock_google_token' })
-       });
-       const data = await res.json();
-       if(!res.ok) throw new Error(data.message || 'Google Auth Failed');
-       login(data);
-       navigate('/dashboard');
-    } catch(err: any) {
-       setError(err.message);
-    }
-  };
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        setLoading(true);
+        setError('');
+        const res = await fetch(buildApiUrl('/api/auth/google'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ accessToken: tokenResponse.access_token })
+        });
+        
+        let data;
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          data = await res.json();
+        } else {
+          throw new Error(`Server Error: ${res.status}`);
+        }
+        
+        if(!res.ok) throw new Error(data?.message || 'Google Auth Failed');
+        login(data);
+        navigate('/dashboard');
+      } catch(err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    },
+    onError: () => setError('Google Login Failed')
+  });
 
   return (
     <div className="w-full animate-fade-in">
