@@ -1,20 +1,32 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Growthify - Frontend
 
-# Run and deploy your AI Studio app
+This is the frontend client for the Growthify application. It is a modern React Single Page Application (SPA) built for extreme speed and premium aesthetics.
 
-This contains everything you need to run your app locally.
+## 🛠️ Tech Stack
+- **Framework:** React 19 + Vite
+- **Styling:** Tailwind CSS v4
+- **Routing:** React Router DOM v7
+- **Authentication:** Google Identity Services (`@react-oauth/google`)
+- **Icons & Animations:** Lucide React, Framer Motion
 
-View your app in AI Studio: https://ai.studio/apps/dbfa8596-fe01-4a04-8838-bcdc45a8fd5f
+## ⚙️ Environment Variables
+Create a `.env` file in the root of the `Frontend` directory:
+```env
+# Required for Google Sign-in to work
+VITE_GOOGLE_CLIENT_ID=your_google_client_id_here.apps.googleusercontent.com
+```
 
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
+## 🚀 Running Locally
 1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+   ```bash
+   npm install
+   ```
+2. Start the Vite development server:
+   ```bash
+   npm run dev
+   ```
+3. Open your browser and navigate to `http://localhost:5173` (or the port specified in your terminal).
+
+## 🌍 Deployment
+This frontend is configured for deployment on **Vercel**. 
+*Note:* A `vercel.json` rewrite file is included in this directory to ensure React Router handles page refreshes correctly without throwing a 404 error.
